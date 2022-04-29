@@ -2,9 +2,13 @@ import Cocoa
 import FlutterMacOS
 
 public class PlatformFileUrlPlugin: NSObject, FlutterPlugin {
+
+  static var platformFileUrlPlugin:PlatformFileUrlPlugin?=nil;
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "platform_file_url", binaryMessenger: registrar.messenger)
     let instance = PlatformFileUrlPlugin()
+    platformFileUrlPlugin = instance
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

@@ -32,4 +32,8 @@ class PlatformFileUrlPlugin: FlutterPlugin, MethodCallHandler {
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
+
+  fun openFile(url: String) {
+    channel?.invokeMethod("openFile", mapOf("url" to url))
+  }
 }

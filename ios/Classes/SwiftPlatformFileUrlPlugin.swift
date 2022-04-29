@@ -11,4 +11,9 @@ public class SwiftPlatformFileUrlPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     result("iOS " + UIDevice.current.systemVersion)
   }
+
+ func openFile(url:String){
+        print("application openFile:"+url)
+       channel.invokeMethod("openFile", arguments:["url":url])
+   }
 }

@@ -4,11 +4,11 @@ import FlutterMacOS
 public class PlatformFileUrlPlugin: NSObject, FlutterPlugin {
 
   static var platformFileUrlPlugin:PlatformFileUrlPlugin?=nil;
-  var channel:FlutterMethodChannel?=nil;
+  //var channell:FlutterMethodChannel?=nil;
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "platform_file_url", binaryMessenger: registrar.messenger)
-    self.channel=channel
+    //channell = channel
     let instance = PlatformFileUrlPlugin()
     platformFileUrlPlugin = instance
     registrar.addMethodCallDelegate(instance, channel: channel)
@@ -24,6 +24,6 @@ public class PlatformFileUrlPlugin: NSObject, FlutterPlugin {
   }
 
   func openFile(url:String){
-         channel?.invokeMethod("openFile", arguments:["url":url])
+         //channell?.invokeMethod("openFile", arguments:["url":url])
      }
 }

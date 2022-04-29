@@ -11,7 +11,7 @@ class PlatformFileUrl {
       'com.xay/platform_file_url');
   bool isInitOk = false;
   OnUrlLinten? onUrlLinten;
-  static final PlatformFileUrl _singleton = new PlatformFileUrl._internal();
+  static final PlatformFileUrl _singleton = PlatformFileUrl._internal();
 
   factory PlatformFileUrl() {
     return _singleton;

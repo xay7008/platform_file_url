@@ -8,7 +8,7 @@ public class SwiftPlatformFileUrlPlugin: NSObject, FlutterPlugin {
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "platform_file_url", binaryMessenger: registrar.messenger())
-    this.channel=channel
+    self.channel=channel
     let instance = SwiftPlatformFileUrlPlugin()
     platformFileUrlPlugin = instance
     registrar.addMethodCallDelegate(instance, channel: channel)

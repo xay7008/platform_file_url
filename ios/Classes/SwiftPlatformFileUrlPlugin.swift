@@ -25,22 +25,57 @@ public class SwiftPlatformFileUrlPlugin: NSObject, FlutterPlugin {
     result("iOS " + UIDevice.current.systemVersion)
   }
 
-  func openFile(url:String)-> Bool{
-      print("application openFile:"+url)
-      if(url.isEmpty || !url.contains(".cb1")){
-          return false
-      }
-      channel.invokeMethod("openFile", arguments:["url":url])
-      return true
-   }
+    func openFile(url: URL) -> Bool {
+        let shouldStopAccessing = url.startAccessingSecurityScopedResource()
+        
+        // 获取沙盒目录中的目标路径
+        let fileManager = FileManager.default
+        let tempDirectory = fileManager.temporaryDirectory
+        let destinationURL = tempDirectory.appendingPathComponent(url.lastPathComponent)
+
+        // 复制文件
+        do {
+            // 如果目标位置已经有文件，先移除它
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try fileManager.removeItem(at: destinationURL)
+            }
+            try fileManager.copyItem(at: url, to: destinationURL)
+        } catch {
+            print("复制文件错误: \(error)")
+            url.stopAccessingSecurityScopedResource()
+            return false
+        }
+        
+        // 停止访问安全作用域资源
+        if shouldStopAccessing {
+            url.stopAccessingSecurityScopedResource()
+        }
+        
+        // 将新路径传递给 Flutter
+        channel.invokeMethod("openFile", arguments: ["url": destinationURL.path])
+        
+        return true
+    }
 
 
     public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        return  openFile(url: url.path)
+           // Ensure that the URL is a file URL
+            guard url.isFileURL else { return false }
+
+            // Start accessing the security-scoped resource
+            let shouldStopAccessing = url.startAccessingSecurityScopedResource()
+
+            // Pass the entire URL to Flutter
+            let success = openFile(url: url)
+
+            // Stop accessing the security-scoped resource
+            if shouldStopAccessing {
+                url.stopAccessingSecurityScopedResource()
+            }
+
+            return success
     }
+    
 
 
-    public func application(_ application: UIApplication, open url: URL, sourceApplication: String, annotation: Any) -> Bool {
-        return openFile(url: url.path)
-    }
 }
